@@ -65,11 +65,25 @@
           "default": [],
           "description": "Command-line arguments to pass to the LSP server. Example: [\"lsp\"]"
         },
-        "glspc.languageId": {
+        "glspc.documentFilters": {
           "scope": "window",
-          "type": "string",
-          "default": "",
-          "description": "The language id for which the server will be used. Example: python."
+          "type": "array",
+          "default": [],
+          "description": "The LSP server will only run on documents that match at least one of these document filters. Setting this to an empty list will disable the server.",
+          "items": {
+            "type": "object",
+            "title": "Document Filter",
+            "properties": {
+              "languageId": {
+                "type": "string",
+                "description": "language ID"
+              },
+              "pattern": {
+                "type": "string",
+                "description": "glob pattern"
+              }
+            }
+          }
         },
         "glspc.environmentVariables": {
           "scope": "window",

@@ -7,6 +7,7 @@ import { type ChildProcess, spawn } from "child_process"
 import type { ExtensionContext } from "vscode"
 import { commands, window, workspace } from "vscode"
 import type {
+  DocumentSelector,
   LanguageClientOptions,
   ServerOptions,
 } from "vscode-languageclient/node"
@@ -22,7 +23,16 @@ function startServer() {
   if (serverCommand) {
     const serverCommandArguments: string[] =
       config.get("serverCommandArguments") ?? []
-    const languageId: string = config.get("languageId") ?? ""
+
+    let documentSelector: DocumentSelector | null = null
+    const languageId: string|undefined = config.get("languageId")
+    if (languageId !== undefined) {
+      documentSelector =  [languageId]
+      // TODO: warn user this is deprecated
+    } else {
+      documentSelector = config.get("documentFilters") ?? []
+    }
+
     const initializationOptions: object =
       config.get("initializationOptions") ?? {}
     const environmentVariables: Record<string, unknown> =
@@ -68,7 +78,7 @@ function startServer() {
     }
 
     const clientOptions: LanguageClientOptions = {
-      documentSelector: [languageId],
+      documentSelector: documentSelector,
       diagnosticCollectionName: "glspc",
       initializationOptions,
     }
