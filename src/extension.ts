@@ -6,11 +6,7 @@
 import { type ChildProcess, spawn } from "child_process"
 import type { ExtensionContext } from "vscode"
 import { commands, window, workspace } from "vscode"
-import type {
-  DocumentSelector,
-  LanguageClientOptions,
-  ServerOptions,
-} from "vscode-languageclient/node"
+import type { DocumentSelector, LanguageClientOptions, ServerOptions, TextDocumentFilter } from "vscode-languageclient/node";
 import { LanguageClient } from "vscode-languageclient/node"
 
 let client: LanguageClient
@@ -30,7 +26,11 @@ function startServer() {
       documentSelector =  [languageId]
       // TODO: warn user this is deprecated
     } else {
-      documentSelector = config.get("documentFilters") ?? []
+      const documentFilters: TextDocumentFilter[] = config.get("documentFilters") ?? []
+      for (const filter of documentFilters) {
+        filter.scheme = 'file'
+      }
+      documentSelector = documentFilters
     }
 
     const initializationOptions: object =

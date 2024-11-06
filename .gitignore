@@ -4,3 +4,4 @@ node_modules
 *.vsix
 tsconfig.tsbuildinfo
 .eslintcache
+.DS_Store
