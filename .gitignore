@@ -2,6 +2,7 @@ out
 node_modules
 .vscode-test/
 *.vsix
+!wip.vsix
 tsconfig.tsbuildinfo
 .eslintcache
 .DS_Store
